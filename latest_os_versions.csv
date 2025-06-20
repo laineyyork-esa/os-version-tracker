@@ -1,5 +1,6 @@
-Platform,Latest_Version,Release_Date,Source_URL,Checked_On
-macOS,15.5,2025-06-10,https://support.apple.com/en-us/100100,2025-06-20 05:40:32 UTC
-iPadOS,18.5,2025-06-10,https://support.apple.com/en-us/100100,2025-06-20 05:40:32 UTC
-Windows,22H2 Build 22631.3593,2025-06-11,https://support.microsoft.com/en-us/topic/june-11-2025-kb5060842,2025-06-20 05:40:32 UTC
-ChromeOS,134.0.6385.204,2025-06-17,https://chromeos.dev/en/releases,2025-06-20 05:40:32 UTC
+Platform,Latest_Version,Next_Version,Descriptive_Name,Release_Date,Source_URL,Checked_On
+iPadOS,26,26 (beta),,2025-06-09,https://www.apple.com/os/ipados/,2025-06-20 05:52:37 UTC
+iOS,26,26 (beta),,2025-06-09,https://www.apple.com/newsroom/2025/06/apple-unveils-ios-26-at-wwdc25/,2025-06-20 05:52:37 UTC
+macOS,15.5,26 Tahoe (beta),Tahoe,2025-09 (public 2025),https://www.apple.com/newsroom/2025/06/macos-tahoe-26-makes-the-mac-more-capable-productive-and-intelligent-than-ever/,2025-06-20 05:52:37 UTC
+Windows,22H2 Build 22631.3593,,,2025-06-11,https://support.microsoft.com/en-us/topic/june-11-2025-kb5060842,2025-06-20 05:52:37 UTC
+ChromeOS,134.0.6385.204,,,2025-06-17,https://chromeos.dev/en/releases,2025-06-20 05:52:37 UTC
