@@ -6,7 +6,7 @@ data = {
     "Current_Release": ["17.5.1", "15.5", "22H2 Build 22631.3593", "134.0.6385.204"],
     "Upcoming_Release": ["26", "26.0", "", ""],
     "Upcoming_Release_Date": ["2025-09", "2025-09", "", ""],
-    "Descriptive_Name": ["", "", "Tahoe", "", ""],
+    "Descriptive_Name": ["", "", "Tahoe", ""],
     "Source_URL": [
         "https://www.apple.com/os/ipados/",
         "https://www.apple.com/macos/",
