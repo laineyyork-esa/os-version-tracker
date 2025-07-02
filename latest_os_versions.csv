@@ -1,5 +1,5 @@
-Platform,Current Available Release,Current Beta Releases,Beta Release Date,Upcoming Public Releases,Public Release Date,Source_URL,Checked_On
-iPadOS,17.5.1,18 Developer Beta 2,2025-06-24,18,2025-09,https://www.apple.com/os/ipados/,2025-07-02 06:08:01 UTC
-macOS,15.5,15.6 Beta,2025-06-24,15.6,2025-09,https://www.apple.com/macos/,2025-07-02 06:08:01 UTC
-Windows,22H2 Build 22631.3593,24H2 Insider Preview,2025-06,24H2,2025-09,https://support.microsoft.com/en-us/topic/june-11-2025-kb5060842,2025-07-02 06:08:01 UTC
-ChromeOS,134.0.6385.204,,,,,https://chromeos.dev/en/releases,2025-07-02 06:08:01 UTC
+Platform,Current Live OS Version,Current Beta Releases,Beta Release Date,Available Minor Beta OS,Minor Beta OS (fix) release date,Available Major Beta OS,Major Beta OS (new system) release date,Checked_On
+iPadOS,17.5.1,"18.2 Beta, 26 Beta","2025-06-24, 2025-07-15",18.2,2025-06-24,26.0,2025-07-15,2025-07-02 06:16:05 UTC
+macOS,15.5,"15.6 Beta, 26 Beta","2025-06-24, 2025-07-10",15.6,2025-06-24,26.0,2025-07-10,2025-07-02 06:16:05 UTC
+Windows,22H2 Build 22631.3593,24H2 Insider Preview,2025-06,,,24.0,2025-06,2025-07-02 06:16:05 UTC
+ChromeOS,134.0.6385.204,,,,,,,2025-07-02 06:16:05 UTC
