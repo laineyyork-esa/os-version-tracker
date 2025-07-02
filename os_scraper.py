@@ -4,7 +4,7 @@ import re
 
 data = {
     "Platform": ["iPadOS", "macOS", "Windows", "ChromeOS"],
-    "Current Live OS Version": ["17.5.1", "15.5", "22H2 Build 22631.3593", "134.0.6385.204"],
+    "Current Live OS": ["17.5.1", "15.5", "22H2 Build 22631.3593", "134.0.6385.204"],
     "Current Beta Releases": ["18.2 Beta, 26 Beta", "15.6 Beta, 26 Beta", "24H2 Insider Preview", ""],
     "Beta Release Date": ["2025-06-24, 2025-07-15", "2025-06-24, 2025-07-10", "2025-06", ""],
 }
@@ -25,11 +25,10 @@ def extract_all_versions(version_str):
 def extract_dates(date_str):
     if not isinstance(date_str, str) or not date_str.strip():
         return []
-    # split dates by commas
     return [d.strip() for d in date_str.split(",")]
 
-minor_betas = []
-minor_beta_dates = []
+bug_fix_betas = []
+bug_fix_beta_dates = []
 major_betas = []
 major_beta_dates = []
 
@@ -37,46 +36,43 @@ for idx, row in df.iterrows():
     beta_versions = extract_all_versions(row["Current Beta Releases"])
     beta_dates = extract_dates(row["Beta Release Date"])
     
-    # Separate minor and major betas with dates mapped by index
-    minors = []
-    minors_dates = []
-    majors = []
-    majors_dates = []
+    bug_fix_list = []
+    bug_fix_dates = []
+    major_list = []
+    major_dates = []
     
     for i, v in enumerate(beta_versions):
         date = beta_dates[i] if i < len(beta_dates) else ""
         if v == int(v):
-            majors.append(v)
-            majors_dates.append(date)
+            major_list.append(v)
+            major_dates.append(date)
         else:
-            minors.append(v)
-            minors_dates.append(date)
+            bug_fix_list.append(v)
+            bug_fix_dates.append(date)
     
-    # Get highest minor beta and its date
-    if minors:
-        max_minor = max(minors)
-        max_minor_date = minors_dates[minors.index(max_minor)]
+    if bug_fix_list:
+        max_bug_fix = max(bug_fix_list)
+        max_bug_fix_date = bug_fix_dates[bug_fix_list.index(max_bug_fix)]
     else:
-        max_minor = None
-        max_minor_date = ""
+        max_bug_fix = ""
+        max_bug_fix_date = ""
     
-    # Get highest major beta and its date
-    if majors:
-        max_major = max(majors)
-        max_major_date = majors_dates[majors.index(max_major)]
+    if major_list:
+        max_major = max(major_list)
+        max_major_date = major_dates[major_list.index(max_major)]
     else:
-        max_major = None
+        max_major = ""
         max_major_date = ""
     
-    minor_betas.append(max_minor if max_minor is not None else "")
-    minor_beta_dates.append(max_minor_date)
-    major_betas.append(max_major if max_major is not None else "")
+    bug_fix_betas.append(max_bug_fix)
+    bug_fix_beta_dates.append(max_bug_fix_date)
+    major_betas.append(max_major)
     major_beta_dates.append(max_major_date)
 
-df["Available Minor Beta OS"] = minor_betas
-df["Minor Beta OS (fix) release date"] = minor_beta_dates
+df["Available Bug Fix Beta"] = bug_fix_betas
+df["Bug Fix Beta Release Date"] = bug_fix_beta_dates
 df["Available Major Beta OS"] = major_betas
-df["Major Beta OS (new system) release date"] = major_beta_dates
+df["Major Beta OS release date"] = major_beta_dates
 
 df["Checked_On"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
