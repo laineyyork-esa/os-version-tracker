@@ -23,19 +23,20 @@ jobs:
       - name: Run Python script
         run: python os_scraper.py
 
-     - name: Commit and push CSV
+  - name: Commit and push CSV
   run: |
     git config user.name "github-actions"
     git config user.email "github-actions@github.com"
-    git pull -X ours --no-edit
+
+    # Disable rebase to prevent conflicts on pull
+    git config pull.rebase false
+
+    # Pull latest with merge, prefer our version
+    git pull --no-edit -X ours
+
     git add latest_os_versions.csv
     git commit -m "Update CSV [auto]" || echo "No changes to commit"
     git push
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
