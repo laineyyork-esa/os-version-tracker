@@ -36,4 +36,4 @@ df["Upcoming_Release_Date"] = pd.to_datetime(df["Upcoming_Release_Date"], errors
 df["Checked_On"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
 
 # Export to CSV
-df.to_csv("latest_os_versions.csv", index=False)
+df.to_csv("https://github.com/laineyyork-esa/os-version-tracker/blob/main/latest_os_versions.csv", index=False)
