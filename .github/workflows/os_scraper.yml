@@ -2,19 +2,19 @@ name: Run OS Scraper Daily
 
 on:
   schedule:
-    - cron: "0 21 * * *"  # Every day at 9:00 PM UTC, which is 7:00 AM AEST
+    - cron: "0 21 * * *"  # Every day at 9:00 PM UTC (7:00 AM AEST)
   workflow_dispatch:      # Allows manual trigger
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
-    steps:
-     - name: Checkout repository
-  uses: actions/checkout@v3
-  with:
-    fetch-depth: 0           # Full history to allow proper merge
-    persist-credentials: true
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0                # Full clone history (important for merges)
+          persist-credentials: true     # Required for pushing with GitHub token
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -27,20 +27,16 @@ jobs:
       - name: Run Python script
         run: python os_scraper.py
 
-  - name: Commit and push CSV
-  run: |
-    git config user.name "github-actions"
-    git config user.email "github-actions@github.com"
+      - name: Commit and push CSV
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-    # Disable rebase to prevent conflicts on pull
-    git config pull.rebase false
+          # Avoid rebase-related conflicts, use merge strategy
+          git pull origin main --no-edit -X ours
 
-    # Pull latest with merge, prefer our version
-    git pull --no-edit -X ours
-
-    git add latest_os_versions.csv
-    git commit -m "Update CSV [auto]" || echo "No changes to commit"
-    git push
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          git add latest_os_versions.csv
+          git commit -m "Update CSV [auto]" || echo "No changes to commit"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
