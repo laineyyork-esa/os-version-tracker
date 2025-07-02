@@ -9,19 +9,26 @@ data = {
         "iOS 26 Beta 2 (23A5276F)", 
         "macOS 26 Beta 2 (23A5276F)", 
         "Windows 24H2 Beta (Build 22631.3593)", 
-        "ChromeOS 142 Beta (Released 1st Oct)"  # Added ChromeOS Beta details
+        "ChromeOS 142 Beta (Released 1st Oct)"
     ],
-    "Upcoming_Public_Releases": ["26", "26", "26.0", "", "142"],  # ChromeOS 142 is the upcoming release
-    "Upcoming_Release_Date": ["2025-09", "2025-09", "2025-09", "", "2025-08-05"],  # ChromeOS 142 public release date
+    "Upcoming_Public_Releases": ["26", "26", "26.0", "", "142"],
+    "Upcoming_Release_Date": ["2025-09", "2025-09", "2025-09", "", "2025-08-05"],
+    "Beta_Developer_Release_Date": [  # New column added here
+        "2025-06-10",  # Example date for iPadOS
+        "2025-06-10",  # Example date for iOS
+        "2025-06-10",  # Example date for macOS
+        "2025-06-12",  # Example for Windows beta
+        "2025-10-01"   # Date listed in beta description for ChromeOS
+    ],
     "Source_URL": [
-        "https://developer.apple.com/news/releases/",  # Updated iPadOS/iOS/macOS URLs
-        "https://developer.apple.com/news/releases/",  # Updated iPadOS/iOS/macOS URLs
-        "https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-26-release-notes",  # iOS 26 specific
-        "https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information",  # Windows 24H2
-        "https://chromiumdash.appspot.com/schedule"  # ChromeOS release schedule
+        "https://developer.apple.com/news/releases/",
+        "https://developer.apple.com/news/releases/",
+        "https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-26-release-notes",
+        "https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information",
+        "https://chromiumdash.appspot.com/schedule"
     ]
 }
 
 df = pd.DataFrame(data)
-df["Checked_On"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")  # Timestamp for when the data was checked
-df.to_csv("latest_os_versions.csv", index=False)  # Saving the updated CSV
+df["Checked_On"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+df.to_csv("latest_os_versions.csv", index=False)
