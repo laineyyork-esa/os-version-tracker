@@ -1,79 +1,63 @@
-from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 import pandas as pd
-import re
+from datetime import datetime
 
-data = {
-    "Platform": ["iPadOS", "macOS", "Windows", "ChromeOS"],
-    "Current Live OS": ["17.5.1", "15.5", "22H2 Build 22631.3593", "134.0.6385.204"],
-    "Current Beta Releases": ["18.2 Beta, 26 Beta", "15.6 Beta, 26 Beta", "24H2 Insider Preview", ""],
-    "Beta Release Date": ["2025-06-24, 2025-07-15", "2025-06-24, 2025-07-10", "2025-06", ""],
-}
+def scrape_apple_releases():
+    url = "https://developer.apple.com/news/releases/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    releases = soup.find_all("li")
+    data = []
+    for release in releases:
+        text = release.get_text(strip=True)
+        if "iPadOS" in text or "macOS" in text:
+            data.append({
+                "Platform": "iPadOS" if "iPadOS" in text else "macOS",
+                "Release": text,
+                "Date": datetime.today().strftime("%Y-%m-%d")
+            })
+    return data
 
-df = pd.DataFrame(data)
+def fetch_chromebook_schedule():
+    url = "https://chromiumdash.appspot.com/fetch_schedule"
+    response = requests.get(url)
+    schedule = response.json()
+    data = []
+    for item in schedule:
+        if item.get("milestone"):
+            data.append({
+                "Platform": "ChromeOS",
+                "Release": f"Milestone {item['milestone']}",
+                "Date": item.get("stable_date", "Unknown")
+            })
+    return data
 
-def extract_all_versions(version_str):
-    if not isinstance(version_str, str) or not version_str.strip():
-        return []
-    parts = re.split(r"[,/;]", version_str)
-    versions = []
-    for part in parts:
-        match = re.search(r"\d+(\.\d+)?", part)
-        if match:
-            versions.append(float(match.group()))
-    return versions
+def scrape_windows_releases():
+    url = "https://learn.microsoft.com/en-us/windows/release-health/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    updates = soup.find_all("li")
+    data = []
+    for update in updates:
+        text = update.get_text(strip=True)
+        if "Windows 11" in text or "Windows 10" in text:
+            data.append({
+                "Platform": "Windows",
+                "Release": text,
+                "Date": datetime.today().strftime("%Y-%m-%d")
+            })
+    return data
 
-def extract_dates(date_str):
-    if not isinstance(date_str, str) or not date_str.strip():
-        return []
-    return [d.strip() for d in date_str.split(",")]
+def compile_os_updates():
+    all_data = []
+    all_data.extend(scrape_apple_releases())
+    all_data.extend(fetch_chromebook_schedule())
+    all_data.extend(scrape_windows_releases())
+    df = pd.DataFrame(all_data)
+    df["Checked_On"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    df.to_csv("daily_os_updates.csv", index=False)
+    print("✅ OS update data saved to daily_os_updates.csv")
 
-bug_fix_betas = []
-bug_fix_beta_dates = []
-major_betas = []
-major_beta_dates = []
-
-for idx, row in df.iterrows():
-    beta_versions = extract_all_versions(row["Current Beta Releases"])
-    beta_dates = extract_dates(row["Beta Release Date"])
-    
-    bug_fix_list = []
-    bug_fix_dates = []
-    major_list = []
-    major_dates = []
-    
-    for i, v in enumerate(beta_versions):
-        date = beta_dates[i] if i < len(beta_dates) else ""
-        if v == int(v):
-            major_list.append(v)
-            major_dates.append(date)
-        else:
-            bug_fix_list.append(v)
-            bug_fix_dates.append(date)
-    
-    if bug_fix_list:
-        max_bug_fix = max(bug_fix_list)
-        max_bug_fix_date = bug_fix_dates[bug_fix_list.index(max_bug_fix)]
-    else:
-        max_bug_fix = ""
-        max_bug_fix_date = ""
-    
-    if major_list:
-        max_major = max(major_list)
-        max_major_date = major_dates[major_list.index(max_major)]
-    else:
-        max_major = ""
-        max_major_date = ""
-    
-    bug_fix_betas.append(max_bug_fix)
-    bug_fix_beta_dates.append(max_bug_fix_date)
-    major_betas.append(max_major)
-    major_beta_dates.append(max_major_date)
-
-df["Available Bug Fix Beta"] = bug_fix_betas
-df["Bug Fix Beta Release Date"] = bug_fix_beta_dates
-df["Available Major Beta OS"] = major_betas
-df["Major Beta OS release date"] = major_beta_dates
-
-df["Checked_On"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-
-df.to_csv("latest_os_versions.csv", index=False)
+if __name__ == "__main__":
+    compile_os_updates()
