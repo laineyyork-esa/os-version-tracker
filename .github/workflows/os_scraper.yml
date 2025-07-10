@@ -3,7 +3,7 @@ name: Run OS Scraper Daily
 on:
   schedule:
     - cron: "0 21 * * *"  # Every day at 9:00 PM UTC (7:00 AM AEST)
-  workflow_dispatch:      # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   run-script:
@@ -13,8 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0                # Full clone history (important for merges)
-          persist-credentials: true     # Required for pushing with GitHub token
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -22,18 +22,18 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-  run: pip install pandas requests beautifulsoup4
+        run: pip install pandas requests beautifulsoup4
 
       - name: Run Python script
         run: python os_scraper.py
 
-     - name: Commit and push CSV
-  run: |
-   git config user.name "laineyyork-esa"
-git config user.email "216996747+laineyyork-esa@users.noreply.github.com"
+      - name: Commit and push CSV
+        run: |
+          git config user.name "laineyyork-esa"
+          git config user.email "216996747+laineyyork-esa@users.noreply.github.com"
 
-    git add latest_os_versions.csv
-    git commit -m "Update CSV [auto]" || echo "No changes to commit"
-    git push origin main
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git add latest_os_versions.csv
+          git commit -m "Update CSV [auto]" || echo "No changes to commit"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
